@@ -1,4 +1,4 @@
-from app.models.ast import Node
+from app.models.rule_ast import Node
 
 def create_rule(rule_string):
     if "age > 30" in rule_string and "salary > 50000" in rule_string:
