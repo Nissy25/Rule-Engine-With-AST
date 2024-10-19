@@ -1,0 +1,13 @@
+├── app/
+│   ├── api/
+│   │   └── routes.py              # API routes for the rule engine
+│   ├── models/
+│   │   └── ast.py                 # Data structure for AST
+│   ├── services/
+│   │   └── rule_engine.py         # Business logic for rule engine
+│   ├── database.py                # Database setup with SQLAlchemy
+│   ├── main.py                    # FastAPI app entry point
+├── requirements.txt               # Dependencies
+└── README.md                      # Project documentation
+
+
