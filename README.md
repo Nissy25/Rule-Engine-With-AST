@@ -3,39 +3,33 @@
 
 ### Table of contents
 
-1.Introduction
+1.Project overview
 
 2.Features  
 
-3.Technologies Used
+3.Architecture
 
-4.Project Structure
+4.Technologies Used
 
 5.Installation
 
-6.Usage
+6.Running the code
 
-7.Testing
+7.How the Rule Engine Works
 
-8.Example Rule  
+8.Design Choices
 
-9.How the Rule Engine Works
+9.Testing
 
-8.Error Handling
+10.Contributing
 
-9.Contributing
-
-10.License
+11.Conclusion
 
 ---
 
-### Introduction
+## Project Overview
 
-An Abstract Syntax Tree (AST) is a data structure that represents the structure of a computer program's source code.
-It's a tree-like representation where each node represents a construct in the source code.ASTs are a fundamental part of how a compiler works.
-This project is a simple Rule Engine using an Abstract Syntax Tree (AST) to dynamically create, combine, and evaluate rules based on conditions like age, salary, department, and experience.
-The goal is to process and evaluate these rules against a dataset and determine if the conditions are met.
-This Rule Engine supports basic logic operations (AND, OR) and conditions like >, <, and ==.
+The Rule Engine with AST is a 3-tier application designed to determine user eligibility based on various attributes such as age, department, income, and experience. It leverages an Abstract Syntax Tree (AST) to represent conditional rules, allowing for the dynamic creation, combination, and modification of these rules.
 
 ---
 ### Features
@@ -46,94 +40,90 @@ This Rule Engine supports basic logic operations (AND, OR) and conditions like >
 - Rule Evaluation: Evaluate a dataset against the defined rules to check if conditions are satisfied.
 
 - Manual Condition Evaluation: Support for operators like >, <, and ==.
+---
+### Architecture
 
+The application consists of the following components:
+
+- API Layer: Handles incoming requests and routes them to the appropriate service functions.
+- Service Layer: Contains the business logic for rule creation, combination, and evaluation.
+- Data Layer: Manages the storage and retrieval of rules using SQLAlchemy and SQLite.
+---
 ### Technologies Used
 
-- Python 3.x
-
-- No external dependencies are required (all libraries used are part of the standard Python library).
-
-### Project Structure
-
-- rule_engine.py: Contains the main logic for creating, combining, and evaluating rules.
-
-- README.md: Contains instructions for running and testing the project.
+- Backend Framework: Fast API
+- Data Structure: Abstract Syntax Tree (AST)
+- Language: Python 
+- In-memory Database: For storing rules during runtime (can be extended to a persistent database)
+- Testing Framework: Unit test
 ---
 ### Installation
-step 1: Clone the repository to your local machine.
-git clone https://github.com/yourusername/rule-engine-ast.git
+- Clone the repository to your local machine.
+```
+git clone https://github.com/yourusername/Rule-Engine-With-AST.git
 cd rule-engine-ast
+```
+- Install Python
 
+  [Download the latest version of Python](https://www.python.org/downloads/)
 
-step 2: Install Python
+- Create a Virtual Environment
+```
+python -m venv venv
+```
+Activate the Virtual Environment
+- For Windows
+```
+.\venv\Scripts\activate
+```
 
-[Download the latest version of Python](https://www.python.org/downloads/)
-
-- Run the installer and make sure to check the box that says "Add Python to PATH".
-
-- After installation, verify the installation by running.This should return the version of Python installed(e.g., Python 3.x.x).
-
+- For Mac/Linux
+```
+source venv/bin/activate
+```
+---
 ### Running the Code
 
-Running the Rule Engine
+Run the application using the following command
+```
+uvicorn app.main:app --reload
+```
+Access the application in your web browser at:
 
-Once Python is installed and the repository is cloned, you can run the main script:python rule_engine.py 
+- http://127.0.0.1:8000
+- Swagger UI for API documentation at http://127.0.0.1:8000/docs
 
-This will execute the main rule engine logic. If there are no external dependencies, the program will create and evaluate rules based on the data.
-
-### Usage
-
-In rule_engine.py, you will find the logic to create rules, combine rules, and evaluate rules.
-
-The rule engine consists of three main components:
-
-##### Creating a Rule:
-
-Rules are created using the create_rule() function, which converts a rule string into an AST.
-Each rule can use conditions like age > 30, salary > 50000, etc.
-Example rule: "age > 30 AND salary > 50000".
-
-##### Combining Rules:
-
-Multiple rules can be combined using the combine_rules() function.
-Rules are combined using logical operators like AND and OR.
-
-##### Evaluating Rules:
-
-Rules are evaluated against the dataset (user data) using the evaluate_rule() function.
-The evaluation returns True if the dataset satisfies the rule, otherwise it returns False.
-
-
-### Testing 
-
-You can also run some test cases to validate that the rules are created, combined, and evaluated correctly. 
-
-Create a separate Python file (e.g., test_rule_engine.py) with the test cases.
-
-Run the test cases with the following command:python test_rule_engine.py 
-
-### Example Rule
-
-Some sample rules that can be created and evaluated:
-
-- rule1 = "((age > 30 AND department = 'Sales') OR (age < 25 AND department = 'Marketing')) AND (salary > 50000 OR experience > 5)"
-- rule2 = "((age > 30 AND department = 'Marketing')) AND (salary > 20000 OR experience > 5)"
-
+---
 ### How the Rule Engine Works
+- Abstract Syntax Tree (AST): The rule engine uses an AST to represent rules. This allows for 
+   easy manipulation, evaluation, and combination of rules.
+- Creating Rules: The create_rule function takes a rule string as input and converts it into an 
+AST.
+- Combining Rules: The combine_rulesfunction takes multiple ASTs and combines them into 
+  a single AST.
+- Evaluating Rules: The evaluate_rule function takes a JSON representation of the AST and 
+   user data as input, and returns True or False based on whether the user satisfies the rule.
+---
+### Design Choices:
+##### Abstract Syntax Tree (AST)
 
-1.Abstract Syntax Tree (AST): The rule engine uses an AST to represent rules. This allows for easy manipulation, evaluation, and combination of rules.
+- The application uses an AST to represent conditional rules.
+- Operator Node: Represents logical operators like AND/OR.
+- Operand Node: Represents conditions like age > 30 or department = 'Sales'.
 
-2.Creating Rules: The create_rule function takes a rule string as input and converts it into an AST.
+##### Rule Parsing and Combination
+- The create_rule function parses the rule string into tokens and builds the corresponding AST.
+- The combine_rule function allows combining multiple rules into one AST using logical operators (e.g., AND, OR).
 
-3.Combining Rules: The combine_rules function takes multiple ASTs and combines them into a single AST.
-
-4.Evaluating Rules: The evaluate_rule function takes a JSON representation of the AST and user data as input, and returns True or False based on whether the user satisfies the rule.
-
-### Error Handling
-
-- The system includes error handling for invalid rule strings and invalid user data.
-- Invalid comparisons or missing operators will raise a ValueError.
-
+##### API Design
+- Fast API was chosen for its simplicity, performance, and automatic generation of interactive documentation.
+- The application includes two core endpoints: create_rule for generating ASTs and evaluate_rule for evaluating them against user data.
+---
+### Testing 
+- Create individual rules from examples and verify their AST representation.
+- Combine rules and ensure the resulting AST reflects the combined logic.
+- Evaluate rules against sample JSON data to test various scenarios.
+---
 ### Contributing
 
 Steps to contribute:
@@ -146,6 +136,7 @@ Steps to contribute:
 
 4.Submit a pull request for review.
 
-### License
+---
+### Conclusion
 
-This project is licensed under the MIT License.
+This Rule Engine application provides a flexible and efficient way to evaluate user eligibility based on dynamic rules. Future improvements could include a user interface, persistent data storage, and enhanced error handling.
