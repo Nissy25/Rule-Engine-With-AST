@@ -1,30 +1,36 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from pydantic import BaseModel
-from typing import List
 from app.services.rule_engine import create_rule, combine_rules, evaluate_rule
-
-# Define the CombineRulesRequest model
-class CombineRulesRequest(BaseModel):
-    rules: List[str]  # List of rule strings
 
 router = APIRouter()
 
+# Define a Pydantic model for the create_rule input
+class CreateRuleRequest(BaseModel):
+    rule_string: str
+
 @router.post("/create_rule")
-def create_rule_endpoint(rule_string: str):
-    rule = create_rule(rule_string)
+def create_rule_endpoint(request: CreateRuleRequest):
+    rule = create_rule(request.rule_string)
     return {"AST": rule}
 
+# Define a Pydantic model for combining rules input
+class CombineRulesRequest(BaseModel):
+    rules: list[str]  # Specify that this is a list of strings
+
 @router.post("/combine_rules")
-def combine_rules_endpoint(rules: List[str]):  # Ensure you're using List[str]
-    try:
-        combined_rule = combine_rules(rules)
-        return {"combined_AST": combined_rule}
-    except Exception as e:
-        return {"detail": str(e)}, 500  # Return the error message
+def combine_rules_endpoint(request: CombineRulesRequest):
+    combined_rule = combine_rules([create_rule(rule) for rule in request.rules])
+    return {"combined_AST": combined_rule}
+
+# Define a Pydantic model for evaluating rules input
+class EvaluateRuleRequest(BaseModel):
+    data: dict  # Expecting a dictionary for the data input
+    rule_string: str
 
 @router.post("/evaluate_rule")
-def evaluate_rule_endpoint(data: dict, rule_string: str):
-    rule = create_rule(rule_string)
-    result = evaluate_rule(rule, data)
+def evaluate_rule_endpoint(request: EvaluateRuleRequest):
+    rule = create_rule(request.rule_string)
+    result = evaluate_rule(rule, request.data)
     return {"result": result}
+
 
