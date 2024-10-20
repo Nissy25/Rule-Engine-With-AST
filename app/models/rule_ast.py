@@ -7,18 +7,27 @@ class Node:
         self.right = None      # Right child node
         self.value = value     # Operand value (e.g., age > 30)
 
-def combine_rules(rules: List[Node]) -> Node:
+def combine_rules(rules: List[str]) -> Node:
     if not rules:
         raise ValueError("No rules to combine")
 
-    # Initialize the combined node as the first rule
-    combined = rules[0]
-    
-    # Combine all rules using the AND operator
-    for rule in rules[1:]:
-        new_combined = Node("operator", "AND")  # Create a new AND node
-        new_combined.left = combined             # Previous combined rule
-        new_combined.right = rule                 # Current rule
-        combined = new_combined                   # Update combined rule
-    
+    # Create a new root node for the combined rule
+    combined = Node("operator", "AND")
+
+    # Parse each rule and add it as a child to the combined node
+    for rule in rules:
+        # Here you might need to implement your logic to parse each rule into a Node
+        # For simplicity, we'll create a Node with the rule as a string
+        rule_node = Node("operand", rule)  # You might want to replace this with actual parsing logic
+        if not combined.left:
+            combined.left = rule_node
+        else:
+            # If left already exists, attach it to the right as an AND operation
+            combined.right = rule_node
+            # Create a new AND node to chain further
+            combined = Node("operator", "AND")
+            combined.left = combined  # Previous combined node
+            combined.right = rule_node  # Current rule
+
     return combined
+
