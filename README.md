@@ -27,6 +27,8 @@
 
 10.License
 
+---
+
 ### Introduction
 
 An Abstract Syntax Tree (AST) is a data structure that represents the structure of a computer program's source code.
@@ -35,6 +37,7 @@ This project is a simple Rule Engine using an Abstract Syntax Tree (AST) to dyna
 The goal is to process and evaluate these rules against a dataset and determine if the conditions are met.
 This Rule Engine supports basic logic operations (AND, OR) and conditions like >, <, and ==.
 
+---
 ### Features
 
 - Dynamic Rule Creation: Create rules using an abstract syntax tree structure.
@@ -55,9 +58,12 @@ This Rule Engine supports basic logic operations (AND, OR) and conditions like >
 - rule_engine.py: Contains the main logic for creating, combining, and evaluating rules.
 
 - README.md: Contains instructions for running and testing the project.
-
+---
 ### Installation
-step 1: Clone the repository to your local machine.[git clone](https://github.com/yourusername/rule-engine-ast.git)
+step 1: Clone the repository to your local machine.
+git clone https://github.com/yourusername/rule-engine-ast.git
+cd rule-engine-ast
+
 
 step 2: Install Python
 
