@@ -15,13 +15,12 @@ def create_rule_endpoint(rule_string: str):
     return {"AST": rule}
 
 @router.post("/combine_rules")
-def combine_rules_endpoint(request: CombineRulesRequest):
+def combine_rules_endpoint(rules: List[str]):  # Ensure you're using List[str]
     try:
-        asts = [create_rule(rule) for rule in request.rules]
-        combined_rule = combine_rules(asts)
+        combined_rule = combine_rules(rules)
         return {"combined_AST": combined_rule}
     except Exception as e:
-        raise HTTPException(status_code=500, detail="An error occurred while combining rules.")
+        return {"detail": str(e)}, 500  # Return the error message
 
 @router.post("/evaluate_rule")
 def evaluate_rule_endpoint(data: dict, rule_string: str):
