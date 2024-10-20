@@ -61,7 +61,7 @@ The application consists of the following components:
 - Clone the repository to your local machine.
 ```
 git clone https://github.com/yourusername/Rule-Engine-With-AST.git
-cd rule-engine-ast
+cd Rule-Engine-With-AST
 ```
 - Install Python
 
