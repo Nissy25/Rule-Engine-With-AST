@@ -10,8 +10,11 @@ class CreateRuleRequest(BaseModel):
 
 @router.post("/create_rule")
 def create_rule_endpoint(request: CreateRuleRequest):
-    rule = create_rule(request.rule_string)
-    return {"AST": rule}
+    try:
+        rule = create_rule(request.rule_string)
+        return {"rule": rule}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 class CombineRulesRequest(BaseModel):
     rules: list[str]
