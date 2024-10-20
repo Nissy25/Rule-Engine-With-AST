@@ -22,12 +22,19 @@ def combine_rules_endpoint(request: CombineRulesRequest):
         # Create an AST for each rule
         asts = [create_rule(rule) for rule in request.rules]
         
+        # Check if ASTs are valid before combining
+        if not all(asts):
+            raise HTTPException(status_code=400, detail="One or more rules are invalid.")
+
         # Combine the ASTs into one
         combined_rule = combine_rules(asts)
         
         return {"combined_AST": combined_rule}
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="An error occurred while combining rules.")
+
 
 @router.post("/evaluate_rule")
 def evaluate_rule_endpoint(data: dict, rule_string: str):
