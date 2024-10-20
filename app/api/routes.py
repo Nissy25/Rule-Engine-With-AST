@@ -13,14 +13,16 @@ def create_rule_endpoint(request: CreateRuleRequest):
     rule = create_rule(request.rule_string)
     return {"AST": rule}
 
-# Define a Pydantic model for combining rules input
 class CombineRulesRequest(BaseModel):
-    rules: list[str]  # Specify that this is a list of strings
+    rules: list[str]
 
 @router.post("/combine_rules")
 def combine_rules_endpoint(request: CombineRulesRequest):
-    combined_rule = combine_rules([create_rule(rule) for rule in request.rules])
-    return {"combined_AST": combined_rule}
+    try:
+        combined_rule = combine_rules(request.rules)
+        return {"combined_rule": combined_rule}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 # Define a Pydantic model for evaluating rules input
 class EvaluateRuleRequest(BaseModel):
